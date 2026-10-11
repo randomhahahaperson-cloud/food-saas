@@ -1,2 +1,14 @@
 # documents
 docs/**
+# dependencies and build output
+node_modules/
+dist/
+
+# wrangler local state and secrets
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+.env*
+
+# os
+.DS_Store
