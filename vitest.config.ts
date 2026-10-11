@@ -12,6 +12,9 @@ export default defineConfig(async () => {
         miniflare: { bindings: { TEST_MIGRATIONS: migrations } },
       }),
     ],
+    resolve: {
+      alias: { "@": path.join(import.meta.dirname, "src") },
+    },
     test: {
       include: ["test/**/*.test.ts"],
       setupFiles: ["./test/apply-migrations.ts"],
