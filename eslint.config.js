@@ -17,4 +17,30 @@ export default tseslint.config(
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     },
   },
+  {
+    // Tenant isolation: only src/worker/db/ may talk to D1 directly. Everything else goes
+    // through createTenantDb() (or the few store lookups exported from db/index.ts).
+    files: ["src/worker/**/*.ts"],
+    ignores: ["src/worker/db/**"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "CallExpression[callee.property.name=/^(prepare|batch|exec|withSession)$/]",
+          message: "Query the database through src/worker/db (createTenantDb), not directly.",
+        },
+      ],
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/db/*"],
+              message: "Import from the db module's index, not its internal files.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

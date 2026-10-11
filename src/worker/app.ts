@@ -1,12 +1,13 @@
 import { Hono } from "hono";
 import type { HealthResponse } from "@/shared/health";
+import { pingDatabase } from "./db";
 
 export type AppEnv = { Bindings: Env };
 
 export const app = new Hono<AppEnv>().basePath("/api");
 
 app.get("/health", async (c) => {
-  await c.env.DB.prepare("SELECT 1").first();
+  await pingDatabase(c.env.DB);
   return c.json<HealthResponse>({ ok: true });
 });
 
